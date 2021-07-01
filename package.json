@@ -1,0 +1,46 @@
+{
+  "name": "@dendra-science/influx-data-pump-cli",
+  "version": "0.0.1",
+  "description": "InfluxDB data pump command line interface tool.",
+  "license": "BSD-2-Clause-FreeBSD",
+  "author": "J. Scott Smith <scott@newleafsolutionsinc.com>",
+  "bin": {
+    "influx-data-pump": "./dist/influx-data-pump.js"
+  },
+  "main": "dist/influx-data-pump.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DendraScience/influx-data-pump-cli.git"
+  },
+  "scripts": {
+    "babel": "babel src -d dist",
+    "build": "npm run lint && npm run clean && npm run babel && npm run chmod",
+    "chmod": "chmod +x dist/influx-data-pump.js",
+    "clean": "rm -rf dist/*",
+    "lint": "eslint src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=12.14"
+  },
+  "dependencies": {
+    "influx": "^5.8.0",
+    "mri": "^1.1.0",
+    "pino": "^6.11.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "prettier": "^2.3.1"
+  },
+  "optionalDependencies": {}
+}
