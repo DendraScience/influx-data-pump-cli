@@ -7,6 +7,12 @@
  * @license BSD-2-Clause-FreeBSD
  * @module app
  */
+const Agent = require('agentkeepalive');
+
+const {
+  HttpsAgent
+} = require('agentkeepalive');
+
 const Influx = require('influx');
 
 const copy = require('./copy');
@@ -16,6 +22,16 @@ const count = require('./count');
 const {
   ping
 } = require('./utils');
+
+function agentOptions() {
+  return {
+    timeout: 60000,
+    freeSocketTimeout: 30000
+  };
+}
+
+const httpAgent = new Agent(agentOptions());
+const httpsAgent = new HttpsAgent(agentOptions());
 
 module.exports = async logger => {
   const app = {}; // App setup
@@ -50,7 +66,11 @@ module.exports = async logger => {
     const sourceInflux = new Influx.InfluxDB({
       database: '_internal',
       host: p.source_host,
-      port: p.source_port
+      options: {
+        agent: p.source_https ? httpsAgent : httpAgent
+      },
+      port: p.source_port,
+      protocol: p.source_https ? 'https' : 'http'
     });
     await ping(sourceInflux, {
       logger
@@ -61,7 +81,11 @@ module.exports = async logger => {
       logger.info(`Connecting to dest: ${p.dest_host}:${p.dest_port}`);
       destInflux = new Influx.InfluxDB({
         host: p.dest_host,
-        port: p.dest_port
+        options: {
+          agent: p.dest_https ? httpsAgent : httpAgent
+        },
+        port: p.dest_port,
+        protocol: p.dest_https ? 'https' : 'http'
       });
       await ping(destInflux, {
         logger

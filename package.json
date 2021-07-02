@@ -24,6 +24,7 @@
     "node": ">=12.14"
   },
   "dependencies": {
+    "agentkeepalive": "^4.1.4",
     "influx": "^5.8.0",
     "mri": "^1.1.0",
     "pino": "^6.11.3"
