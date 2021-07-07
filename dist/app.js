@@ -51,6 +51,8 @@ module.exports = async logger => {
     const endsBefore = p.ends_before && new Date(p.ends_before);
     const databases = p.databases && p.databases.split(',');
     const measurements = p.measurements && p.measurements.split(',');
+    const skipDatabases = p.skip_databases && p.skip_databases.split(',');
+    const skipMeasurements = p.skip_measurements && p.skip_measurements.split(',');
     const summary = {
       databases: [],
       stats: {
@@ -92,7 +94,10 @@ module.exports = async logger => {
       });
     }
 
-    const dbNames = await sourceInflux.getDatabaseNames();
+    let dbNames = await sourceInflux.getDatabaseNames();
+    if (p.sort_by_name) dbNames = dbNames.sort((a, b) => a.localeCompare(b, 'en', {
+      sensitivity: 'base'
+    }));
     logger.info(`Found ${dbNames.length} source database(s).`); // Iterate over databases
 
     for (const dbName of dbNames) {
@@ -110,7 +115,7 @@ module.exports = async logger => {
       };
       summary.databases.push(database);
 
-      if (dbName.startsWith('_') || databases && !databases.includes(dbName)) {
+      if (dbName.startsWith('_') || databases && !databases.includes(dbName) || skipDatabases && skipDatabases.includes(dbName)) {
         logger.info(`Skipping source database: ${dbName}`);
         database.is_skipped = true;
         summary.stats.databases_skipped_count++;
@@ -119,7 +124,10 @@ module.exports = async logger => {
 
       logger.info(`Processing source database: ${dbName}`);
       database.measurements = [];
-      const mmNames = await sourceInflux.getMeasurements(dbName);
+      let mmNames = await sourceInflux.getMeasurements(dbName);
+      if (p.sort_by_name) mmNames = mmNames.sort((a, b) => a.localeCompare(b, 'en', {
+        sensitivity: 'base'
+      }));
       logger.info(`Found ${mmNames.length} source measurement(s).`); // Iterate over measurements
 
       for (const mmName of mmNames) {
@@ -134,7 +142,7 @@ module.exports = async logger => {
         };
         database.measurements.push(measurement);
 
-        if (mmName.startsWith('_') || measurements && !measurements.includes(mmName) && !measurements.includes(`${dbName}.${mmName}`)) {
+        if (mmName.startsWith('_') || measurements && !(measurements.includes(mmName) || measurements.includes(`${dbName}.${mmName}`)) || skipMeasurements && (skipMeasurements.includes(mmName) || skipMeasurements.includes(`${dbName}.${mmName}`))) {
           logger.info(`Skipping source measurement: ${mmName}`);
           measurement.is_skipped = true;
           database.stats.measurements_skipped_count++;

@@ -64,6 +64,9 @@ require('./app')(logger).then(app => {
       max_retries: 'max-retries',
       query_limit: 'query-limit',
       retry_delay: 'retry-delay',
+      skip_databases: 'skip-databases',
+      skip_measurements: 'skip-measurements',
+      sort_by_name: 'sort-by-name',
       source_host: 'source-host',
       source_https: 'source-https',
       source_port: 'source-port'
@@ -78,11 +81,12 @@ require('./app')(logger).then(app => {
       precision: 'ms',
       query_limit: 5000,
       retry_delay: 5000,
+      sort_by_name: false,
       source_host: '127.0.0.1',
       source_https: false,
       source_port: 8086
     },
-    boolean: ['count_only', 'dest_https', 'source_https'],
+    boolean: ['count_only', 'dest_https', 'sort_by_name', 'source_https'],
     string: [
       'begins_at',
       'databases',
@@ -90,6 +94,8 @@ require('./app')(logger).then(app => {
       'ends_before',
       'measurements',
       'precision',
+      'skip_databases',
+      'skip_measurements',
       'source_host'
     ]
   })
