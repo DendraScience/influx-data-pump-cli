@@ -13,6 +13,8 @@ const {
   HttpsAgent
 } = require('agentkeepalive');
 
+const axios = require('axios');
+
 const Influx = require('influx');
 
 const copy = require('./copy');
@@ -53,6 +55,7 @@ module.exports = async logger => {
     const measurements = p.measurements && p.measurements.split(',');
     const skipDatabases = p.skip_databases && p.skip_databases.split(',');
     const skipMeasurements = p.skip_measurements && p.skip_measurements.split(',');
+    const postSummaryURL = p.post_summary_url;
     const summary = {
       databases: [],
       stats: {
@@ -61,6 +64,7 @@ module.exports = async logger => {
         measurements_processed_count: 0,
         measurements_skipped_count: 0,
         points_written: 0,
+        started_at: new Date(),
         values_count: 0
       }
     };
@@ -177,6 +181,15 @@ module.exports = async logger => {
 
       database.is_processed = true;
       summary.stats.databases_processed_count++;
+    }
+
+    const finishedAt = new Date();
+    summary.stats.duration = finishedAt - summary.stats.started_at;
+    summary.stats.finished_at = finishedAt;
+
+    if (postSummaryURL) {
+      logger.info(`POSTing summary to: ${postSummaryURL}`);
+      await axios.post(postSummaryURL, summary);
     }
 
     logger.info({

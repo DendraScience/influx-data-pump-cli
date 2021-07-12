@@ -55,6 +55,7 @@ require('./app')(logger).then(app => {
       dest_port: 'dest-port',
       ends_before: 'ends-before',
       max_retries: 'max-retries',
+      post_summary_url: 'post-summary-url',
       query_limit: 'query-limit',
       retry_delay: 'retry-delay',
       skip_databases: 'skip-databases',
@@ -80,7 +81,7 @@ require('./app')(logger).then(app => {
       source_port: 8086
     },
     boolean: ['count_only', 'dest_https', 'sort_by_name', 'source_https'],
-    string: ['begins_at', 'databases', 'dest_host', 'ends_before', 'measurements', 'precision', 'skip_databases', 'skip_measurements', 'source_host']
+    string: ['begins_at', 'databases', 'dest_host', 'ends_before', 'measurements', 'post_summary_url', 'precision', 'skip_databases', 'skip_measurements', 'source_host']
   });
   return app.eval(parsed);
 });
