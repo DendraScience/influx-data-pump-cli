@@ -1,6 +1,6 @@
 {
   "name": "@dendra-science/influx-data-pump-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "InfluxDB data pump command line interface tool.",
   "license": "BSD-2-Clause-FreeBSD",
   "author": "J. Scott Smith <scott@newleafsolutionsinc.com>",
@@ -25,24 +25,24 @@
   },
   "dependencies": {
     "agentkeepalive": "^4.1.4",
-    "axios": "^0.21.1",
+    "axios": "^0.22.0",
     "influx": "^5.8.0",
-    "mri": "^1.1.0",
-    "pino": "^6.12.0"
+    "mri": "^1.2.0",
+    "pino": "^6.13.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.14",
-    "@babel/core": "^7.13.14",
-    "@babel/preset-env": "^7.13.12",
-    "eslint": "^7.30.0",
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
-    "prettier": "^2.3.2"
+    "prettier": "^2.4.1"
   },
   "optionalDependencies": {}
 }

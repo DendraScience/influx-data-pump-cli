@@ -11,7 +11,7 @@ const { HttpsAgent } = require('agentkeepalive')
 const axios = require('axios')
 const Influx = require('influx')
 const copy = require('./copy')
-const count = require('./count')
+const { counts, firstPoint, lastPoint } = require('./stats')
 const { ping } = require('./utils')
 
 function agentOptions() {
@@ -34,7 +34,7 @@ module.exports = async logger => {
     if (!p.source_host) throw new Error('Required: source_host')
     if (!p.source_port) throw new Error('Required: source_port')
     if (
-      !p.count_only &&
+      !p.stats_only &&
       `${p.source_host}:${p.source_port}` === `${p.dest_host}:${p.dest_port}`
     )
       throw new Error('Source and dest cannot be the same server')
@@ -78,7 +78,7 @@ module.exports = async logger => {
     await ping(sourceInflux, { logger })
 
     let destInflux
-    if (!p.count_only) {
+    if (!p.stats_only) {
       logger.info(`Connecting to dest: ${p.dest_host}:${p.dest_port}`)
       destInflux = new Influx.InfluxDB({
         host: p.dest_host,
@@ -188,8 +188,13 @@ module.exports = async logger => {
           sourceInflux,
           summary
         }
-        if (p.count_only) await count(ctx)
-        else await copy(ctx)
+        if (p.stats_only) {
+          await counts(ctx)
+          await firstPoint(ctx)
+          await lastPoint(ctx)
+        } else {
+          await copy(ctx)
+        }
 
         measurement.is_processed = true
         database.stats.measurements_processed_count++

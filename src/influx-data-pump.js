@@ -56,7 +56,6 @@ require('./app')(logger).then(app => {
       batch_delay: 'batch-delay',
       batch_size: 'batch-size,',
       begins_at: 'begins-at',
-      count_only: 'count-only',
       dest_host: 'dest-host',
       dest_https: 'dest-https',
       dest_port: 'dest-port',
@@ -70,7 +69,8 @@ require('./app')(logger).then(app => {
       sort_by_name: 'sort-by-name',
       source_host: 'source-host',
       source_https: 'source-https',
-      source_port: 'source-port'
+      source_port: 'source-port',
+      stats_only: 'stats-only'
     },
     default: {
       batch_delay: 0,
@@ -87,7 +87,7 @@ require('./app')(logger).then(app => {
       source_https: false,
       source_port: 8086
     },
-    boolean: ['count_only', 'dest_https', 'sort_by_name', 'source_https'],
+    boolean: ['dest_https', 'sort_by_name', 'source_https', 'stats_only'],
     string: [
       'begins_at',
       'databases',

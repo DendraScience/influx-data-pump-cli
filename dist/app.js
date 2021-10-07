@@ -19,7 +19,11 @@ const Influx = require('influx');
 
 const copy = require('./copy');
 
-const count = require('./count');
+const {
+  counts,
+  firstPoint,
+  lastPoint
+} = require('./stats');
 
 const {
   ping
@@ -43,7 +47,7 @@ module.exports = async logger => {
     if (!p.dest_port) throw new Error('Required: dest_port');
     if (!p.source_host) throw new Error('Required: source_host');
     if (!p.source_port) throw new Error('Required: source_port');
-    if (!p.count_only && `${p.source_host}:${p.source_port}` === `${p.dest_host}:${p.dest_port}`) throw new Error('Source and dest cannot be the same server');
+    if (!p.stats_only && `${p.source_host}:${p.source_port}` === `${p.dest_host}:${p.dest_port}`) throw new Error('Source and dest cannot be the same server');
     const batchDelay = p.batch_delay | 0;
     const batchSize = p.batch_size | 0;
     const queryLimit = p.query_limit | 0;
@@ -83,7 +87,7 @@ module.exports = async logger => {
     });
     let destInflux;
 
-    if (!p.count_only) {
+    if (!p.stats_only) {
       logger.info(`Connecting to dest: ${p.dest_host}:${p.dest_port}`);
       destInflux = new Influx.InfluxDB({
         host: p.dest_host,
@@ -173,7 +177,15 @@ module.exports = async logger => {
           sourceInflux,
           summary
         };
-        if (p.count_only) await count(ctx);else await copy(ctx);
+
+        if (p.stats_only) {
+          await counts(ctx);
+          await firstPoint(ctx);
+          await lastPoint(ctx);
+        } else {
+          await copy(ctx);
+        }
+
         measurement.is_processed = true;
         database.stats.measurements_processed_count++;
         summary.stats.measurements_processed_count++;
