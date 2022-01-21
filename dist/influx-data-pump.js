@@ -52,6 +52,7 @@ require('./app')(logger).then(app => {
       dest_host: 'dest-host',
       dest_https: 'dest-https',
       dest_port: 'dest-port',
+      dest_measurement_suffix: 'dest-measurement-suffix',
       ends_before: 'ends-before',
       max_retries: 'max-retries',
       post_summary_url: 'post-summary-url',
