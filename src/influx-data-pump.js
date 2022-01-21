@@ -92,6 +92,7 @@ require('./app')(logger).then(app => {
       'begins_at',
       'databases',
       'dest_host',
+      'dest_measurement_suffix',
       'ends_before',
       'measurements',
       'post_summary_url',

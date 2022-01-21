@@ -47,13 +47,16 @@ async function copy({
 
     lastTime = results[results.length - 1].time
 
-    // Map results tp points for writing
+    // Map results to points for writing
     const points = []
+    const mmNameDest = p.dest_measurement_suffix
+      ? `${mmName}${p.dest_measurement_suffix}`
+      : mmName
     for (let i = 0; i < results.length; i++) {
       const fields = results[i]
       points.push({
         fields,
-        measurement: mmName,
+        measurement: mmNameDest,
         timestamp: fields.time
       })
       delete fields.time

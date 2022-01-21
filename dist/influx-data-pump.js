@@ -81,7 +81,7 @@ require('./app')(logger).then(app => {
       source_port: 8086
     },
     boolean: ['dest_https', 'sort_by_name', 'source_https', 'stats_only'],
-    string: ['begins_at', 'databases', 'dest_host', 'ends_before', 'measurements', 'post_summary_url', 'precision', 'skip_databases', 'skip_measurements', 'source_host']
+    string: ['begins_at', 'databases', 'dest_host', 'dest_measurement_suffix', 'ends_before', 'measurements', 'post_summary_url', 'precision', 'skip_databases', 'skip_measurements', 'source_host']
   });
   return app.eval(parsed);
 });

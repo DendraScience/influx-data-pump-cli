@@ -37,15 +37,16 @@ async function copy({
     const results = await sourceInflux.query(query, sourceOptions);
     logger.info(`Found ${results.length} source points(s).`);
     if (!results.length) break;
-    lastTime = results[results.length - 1].time; // Map results tp points for writing
+    lastTime = results[results.length - 1].time; // Map results to points for writing
 
     const points = [];
+    const mmNameDest = p.dest_measurement_suffix ? `${mmName}${p.dest_measurement_suffix}` : mmName;
 
     for (let i = 0; i < results.length; i++) {
       const fields = results[i];
       points.push({
         fields,
-        measurement: mmName,
+        measurement: mmNameDest,
         timestamp: fields.time
       });
       delete fields.time;
