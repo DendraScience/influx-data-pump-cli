@@ -1,3 +1,6 @@
+const { assertNoErrors } = require('influx/lib/src/results')
+const { escape } = require('influx/lib/src/grammar/escape')
+
 async function copy({
   batchDelay,
   batchSize,
@@ -84,7 +87,24 @@ async function copy({
             }
           }
           if (createDb) {
-            await destInflux.createDatabase(dbName)
+            // NOTE: Does NOT support shard options, need to use newer official client!
+            // await destInflux.createDatabase(dbName)
+
+            // HACK: Create database with shard duration specified (HARDCODED to 20 years)
+            await destInflux._pool
+              .json(
+                destInflux._getQueryOpts(
+                  {
+                    q: `create database ${escape.quoted(
+                      dbName
+                    )} with duration inf shard duration 7300d name "autogen"`
+                  },
+                  'POST'
+                )
+              )
+              .then(assertNoErrors)
+              .then(() => undefined)
+
             database.is_created = true
 
             await destInflux.writePoints(pointsBatch, destOptions)

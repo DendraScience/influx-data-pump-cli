@@ -1,6 +1,6 @@
 {
   "name": "@dendra-science/influx-data-pump-cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "InfluxDB data pump command line interface tool.",
   "license": "BSD-2-Clause-FreeBSD",
   "author": "J. Scott Smith <scott@newleafsolutionsinc.com>",
@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "agentkeepalive": "^4.1.4",
-    "axios": "^0.22.0",
-    "influx": "^5.8.0",
+    "axios": "^0.24.0",
+    "influx": "^5.9.2",
     "mri": "^1.2.0",
     "pino": "^6.13.3"
   },
